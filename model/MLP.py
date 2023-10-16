@@ -5,10 +5,10 @@ import torch.nn as nn
 class MLP_1(nn.Module):
     def __init__(self, config):
         super().__init__()
-        self.image_W = config.image_W
-        self.image_H = config.image_H
-        self.image_C = config.image_C
-        self.num_classes = config.num_classes
+        self.image_W = config['image_W']
+        self.image_H = config['image_H']
+        self.image_C = config['image_C']
+        self.num_classes = config['num_classes']
         self.fc=nn.Linear(self.image_C*self.image_H*self.image_W,self.num_classes)
     def forward(self, x):
         x = x.view(x.shape[0],x.shape[1]*x.shape[2])
@@ -19,10 +19,10 @@ class MLP_1(nn.Module):
 class MLP_2(nn.Module):
     def __init__(self, config):
         super().__init__()
-        self.image_W = config.image_W
-        self.image_H = config.image_H
-        self.image_C = config.image_C
-        self.num_classes = config.num_classes
+        self.image_W = config['image_W']
+        self.image_H = config['image_H']
+        self.image_C = config['image_C']
+        self.num_classes = config['num_classes']
         self.fc1=nn.Linear(self.image_C*self.image_H*self.image_W,512)
         self.fc2=nn.Linear(512,256)
         self.fc3=nn.Linear(256,self.num_classes)
@@ -36,9 +36,9 @@ class MLP_2(nn.Module):
 class MLP_Model(nn.Module):
     def __init__(self, config):
         super().__init__()
-        if config.model=='model_1':
+        if config['model']=='model_1':
             self.mlp=MLP_1(config)
-        if config.model=='model_2':
+        if config['model']=='model_2':
             self.mlp=MLP_2(config)
         self.loss_fn=nn.CrossEntropyLoss()
     def forward(self,imgs,labels=None):

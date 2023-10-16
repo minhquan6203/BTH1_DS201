@@ -9,7 +9,7 @@ class Inference:
     def __init__(self,config):
         self.base_model = MLP_Model(config).to(self.device)
         self.dataloader = Load_data(config)
-        self.save_path=config.save_path
+        self.save_path=config['save_path']
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     def predict(self):
         test_data = self.dataloader.load_test()

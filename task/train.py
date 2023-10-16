@@ -12,11 +12,11 @@ from tqdm import tqdm
 
 class Classify_Task:
     def __init__(self, config):
-        self.num_epochs = config.num_epochs
-        self.patience = config.patience
-        self.learning_rate = config.learning_rate
-        self.best_metric=config.best_metric
-        self.save_path=config.save_path
+        self.num_epochs = config['num_epochs']
+        self.patience = config['patience']
+        self.learning_rate = config['learning_rate']
+        self.best_metric=config['best_metric']
+        self.save_path=config['save_path']
         self.dataloader = Load_data(config)
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.base_model = MLP_Model(config).to(self.device)

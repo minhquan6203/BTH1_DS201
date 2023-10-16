@@ -40,18 +40,18 @@
 
 # class Load_data:
 #     def __init__(self, config):
-#         self.train_path=config.train_path
-#         self.dev_path=config.dev_path
-#         self.test_path=config.test_path
+#         self.train_path=config['train_path
+#         self.dev_path=config['dev_path
+#         self.test_path=config['test_path
 
-#         self.train_batch=config.train_batch
-#         self.dev_batch=config.dev_batch
-#         self.test_batch=config.test_batch
+#         self.train_batch=config['train_batch
+#         self.dev_batch=config['dev_batch
+#         self.test_batch=config['test_batch
 
-#         self.image_H = config.image_H
-#         self.image_W = config.image_W
-#         self.aug = config.aug
-#         self.num_worker=config.num_worker
+#         self.image_H = config['image_H
+#         self.image_W = config['image_W
+#         self.aug = config['aug
+#         self.num_worker=config['num_worker
 
 #     def load_train_dev(self):
 #         train_set=IMG_Dataset(self.train_path,self.image_W,self.image_H,self.aug)
@@ -98,13 +98,13 @@ class MNISTDataset(Dataset):
 
 class Load_data:
     def __init__(self, config):
-        self.train_images_file = config.train_image_path
-        self.train_labels_file = config.train_label_path
-        self.test_images_file = config.test_image_path
-        self.test_labels_file = config.test_label_path
-        self.train_batch=config.train_batch
-        self.val_batch=config.val_batch
-        self.test_batch=config.test_batch
+        self.train_images_file = config['train_image_path']
+        self.train_labels_file = config['train_label_path']
+        self.test_images_file = config['test_image_path']
+        self.test_labels_file = config['test_label_path']
+        self.train_batch=config['train_batch']
+        self.val_batch=config['val_batch']
+        self.test_batch=config['test_batch']
     def get_train_loader(self):
         train_dev_set = MNISTDataset(self.train_images_file,self.train_labels_file)
         dataset_size = len(train_dev_set)
