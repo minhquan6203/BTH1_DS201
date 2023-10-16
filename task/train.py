@@ -49,6 +49,9 @@ class Classify_Task:
         self.base_model.train()
         for epoch in range(initial_epoch, self.num_epochs + initial_epoch):
             valid_acc = 0.
+            valid_f1=0.
+            valid_precision=0.
+            valid_recall=0.
             train_loss = 0.
             for it,item in enumerate(tqdm(train)):
                 images, labels = item['image'].to(self.device), item['label'].to(self.device)
@@ -63,8 +66,12 @@ class Classify_Task:
                     images, labels = item['image'].to(self.device), item['label'].to(self.device)
                     logits = self.base_model(images)
                     preds = logits.argmax(-1)
-                    valid_acc, valid_f1, valid_precision, valid_recall=compute_score(labels.cpu().numpy(),preds.cpu().numpy())
-
+                    acc, f1, precision, recall=compute_score(labels.cpu().numpy(),preds.cpu().numpy())
+                    valid_acc+=acc
+                    valid_f1+=f1
+                    valid_precision+=precision
+                    valid_recall+=recall
+        
             train_loss /= len(train)
             valid_acc /= len(valid)
             valid_f1 /= len(valid)

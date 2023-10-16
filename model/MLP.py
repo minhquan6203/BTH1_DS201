@@ -13,7 +13,7 @@ class MLP_1(nn.Module):
     def forward(self, x):
         x = x.view(x.shape[0],x.shape[1]*x.shape[2])
         x = self.fc(x)
-        x = torch.softmax(x)
+        x = torch.softmax(x,dim=-1)
         return x
 
 class MLP_2(nn.Module):
@@ -30,7 +30,7 @@ class MLP_2(nn.Module):
     def forward(self, x):
         x = x.view(x.shape[0],x.shape[1]*x.shape[2])
         x = self.fc3(self.relu(self.fc2(self.relu(self.fc1(x)))))
-        x = torch.softmax(x)
+        x = torch.softmax(x,dim=1)
         return x
 
 class MLP_Model(nn.Module):

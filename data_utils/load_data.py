@@ -70,18 +70,15 @@ import struct
 import numpy as np
 import torch
 from torch.utils.data import DataLoader, Dataset, random_split
+import idx2numpy
+
 class MNISTDataset(Dataset):
     def __init__(self, images_file, labels_file):
         self.data=self.load_data(images_file,labels_file)
     
     def load_data(self, images_file, labels_file):
-        with open(images_file, 'rb') as f:
-            magic, num_images, num_rows, num_cols = struct.unpack('>IIII', f.read(16))
-            images = np.fromfile(f, dtype=np.uint8).reshape(num_images, num_rows, num_cols)
-
-        with open(labels_file, 'rb') as f:
-            magic, num_items = struct.unpack('>II', f.read(8))
-            labels = np.fromfile(f, dtype=np.uint8)
+        images = idx2numpy.convert_from_file(images_file)
+        labels = idx2numpy.convert_from_file(labels_file)
 
         images = torch.tensor(images, dtype=torch.float32)
         labels = torch.tensor(labels, dtype=torch.long)
@@ -105,7 +102,7 @@ class Load_data:
         self.train_batch=config['train_batch']
         self.val_batch=config['val_batch']
         self.test_batch=config['test_batch']
-    def get_train_loader(self):
+    def load_train_dev(self):
         train_dev_set = MNISTDataset(self.train_images_file,self.train_labels_file)
         dataset_size = len(train_dev_set)
         train_size = int(0.9 * dataset_size)  # You can adjust the split ratio as needed
@@ -116,7 +113,7 @@ class Load_data:
         val_loader = DataLoader(val_set, batch_size=self.val_batch, num_workers=2,shuffle=True)
         return train_loader,val_loader
     
-    def get_test_loader(self):
-        test_set = MNISTDataset(self.train_images_file,self.train_labels_file)
+    def load_test(self):
+        test_set = MNISTDataset(self.test_images_file,self.test_labels_file)
         test_loader = DataLoader(test_set, batch_size=self.test_batch,num_workers=2,shuffle=False)
         return test_loader
