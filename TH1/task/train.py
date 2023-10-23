@@ -20,7 +20,8 @@ class Classify_Task:
         self.dataloader = Load_data(config)
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.base_model = MLP_Model(config).to(self.device)
-        self.optimizer = optim.Adam(self.base_model.parameters(), lr=self.learning_rate)
+        # self.optimizer = optim.Adam(self.base_model.parameters(), lr=self.learning_rate)
+        self.optimizer = optim.SGD(lr=self.learning_rate,momentum=0.5)
     def training(self):
         if not os.path.exists(self.save_path):
           os.makedirs(self.save_path)
