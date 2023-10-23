@@ -11,6 +11,7 @@ from model.MLP import MLP_Model
 from tqdm import tqdm
 from utils.regularzation import l2_regularzation,l1_regularzation
 from utils.init_method import ones_init,xavier_init
+from utils.count_param import countTrainableParameters
 
 class Classify_Task:
     def __init__(self, config):
@@ -37,6 +38,8 @@ class Classify_Task:
             self.optimizer = optim.RMSprop(lr=self.learning_rate,momentum=self.momentum)
         else:
             self.optimizer = optim.Adam(self.base_model.parameters(), lr=self.learning_rate)
+        params=countTrainableParameters(self.base_model)
+        print('the number of param of model: ',params)
     def training(self):
         if not os.path.exists(self.save_path):
           os.makedirs(self.save_path)
