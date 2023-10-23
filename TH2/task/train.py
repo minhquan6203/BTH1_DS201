@@ -33,9 +33,9 @@ class Classify_Task:
         if config['optimizer_type']=='adam':
             self.optimizer = optim.Adam(self.base_model.parameters(), lr=self.learning_rate)
         elif config['optimizer_type']=='sgd':
-            self.optimizer = optim.SGD(lr=self.learning_rate,momentum=self.momentum)
+            self.optimizer = optim.SGD(self.base_model.parameters(),lr=self.learning_rate,momentum=self.momentum)
         elif config['optimizer_type']=='rmsprop':
-            self.optimizer = optim.RMSprop(lr=self.learning_rate,momentum=self.momentum)
+            self.optimizer = optim.RMSprop(self.base_model.parameters(),lr=self.learning_rate,momentum=self.momentum)
         else:
             self.optimizer = optim.Adam(self.base_model.parameters(), lr=self.learning_rate)
         params=countTrainableParameters(self.base_model)

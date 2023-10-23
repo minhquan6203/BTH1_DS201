@@ -13,10 +13,10 @@ image_W: 28
 image_H: 28
 lambda: 0.01
 model: model_3
-init_type: ones #one or xavier
-regularzation_type: l2 #l1 or l2
+init_type: null #null or ones or xavier
+regularzation_type: null #null or l1 or l2
 momentum: 0.5
-optimizer_type: adam #adam or sgd or rmsprop
+optimizer_type: adam #adam is default or sgd or rmsprop
 num_classes: 10
 learning_rate: 0.01
 num_epochs: 100
