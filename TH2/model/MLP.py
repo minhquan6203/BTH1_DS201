@@ -59,6 +59,8 @@ class MLP_Model(nn.Module):
             self.mlp=MLP_1(config)
         if config['model']=='model_2':
             self.mlp=MLP_2(config)
+        if config['model']=='model_3':
+            self.mlp=MLP_3(config)
         self.loss_fn=nn.CrossEntropyLoss()
     def forward(self,imgs,labels=None):
         if labels is not None:

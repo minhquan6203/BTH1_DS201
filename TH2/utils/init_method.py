@@ -1,10 +1,13 @@
 import torch.nn as nn
 def ones_init(model):
-    nn.init.ones_(model.weight)
-    nn.init.ones_(model.bias)
-    return model
+    for module in model.modules():
+        if isinstance(module, nn.Linear):
+            nn.init.ones_(module.weight)
+            nn.init.ones_(module.bias)
 
 def xavier_init(model):
-    nn.init.xavier_uniform_(model.weight)
-    nn.init.zeros_(model.bias)
-    return model
+    for module in model.modules():
+        if isinstance(module, nn.Linear):
+            nn.init.xavier_uniform_(module.weight)
+            if module.bias is not None:
+                nn.init.constant_(module.bias, 0.0)

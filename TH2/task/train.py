@@ -26,9 +26,9 @@ class Classify_Task:
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.base_model = MLP_Model(config).to(self.device)
         if config['init_type']=='ones':
-            self.base_model=ones_init(self.base_model)
+            ones_init(self.base_model)
         if config['init_type']=='xavier':
-            self.base_model=xavier_init(self.base_model)
+            xavier_init(self.base_model)
         if config['optimizer_type']=='adam':
             self.optimizer = optim.Adam(self.base_model.parameters(), lr=self.learning_rate)
         elif config['optimizer_type']=='sgd':
