@@ -6,31 +6,44 @@ import torchvision.models as models
 class InceptionModule(nn.Module):
     def __init__(self, in_channels, out1x1, red3x3, out3x3, red5x5, out5x5, out1x1pool):
         super(InceptionModule, self).__init__()
-
         self.branch1 = nn.Conv2d(in_channels, out1x1, kernel_size=1)
+        self.branch1_bn = nn.BatchNorm2d(out1x1)
 
         self.branch2 = nn.Sequential(
             nn.Conv2d(in_channels, red3x3, kernel_size=1),
-            nn.Conv2d(red3x3, out3x3, kernel_size=3, padding=1)
+            nn.BatchNorm2d(red3x3),
+            nn.ReLU(),
+            nn.Conv2d(red3x3, out3x3, kernel_size=3, padding=1),
+            nn.BatchNorm2d(out3x3),
+            nn.ReLU(),
+            nn.Dropout(0.2)
         )
 
         self.branch3 = nn.Sequential(
             nn.Conv2d(in_channels, red5x5, kernel_size=1),
-            nn.Conv2d(red5x5, out5x5, kernel_size=5, padding=2)
+            nn.BatchNorm2d(red5x5),
+            nn.ReLU(),
+            nn.Conv2d(red5x5, out5x5, kernel_size=5, padding=2),
+            nn.BatchNorm2d(out5x5),
+            nn.ReLU(),
+            nn.Dropout(0.2)
         )
 
         self.branch4 = nn.Sequential(
             nn.MaxPool2d(kernel_size=3, stride=1, padding=1),
-            nn.Conv2d(in_channels, out1x1pool, kernel_size=1)
+            nn.Conv2d(in_channels, out1x1pool, kernel_size=1),
+            nn.BatchNorm2d(out1x1pool),
+            nn.ReLU(),
+            nn.Dropout(0.2)
         )
 
     def forward(self, x):
-        branch1 = self.branch1(x)
+        branch1 = self.branch1_bn(self.branch1(x))
         branch2 = self.branch2(x)
         branch3 = self.branch3(x)
         branch4 = self.branch4(x)
 
-        return torch.cat([branch1, branch2, branch3, branch4], 1)
+        return torch.cat([branch1, branch2, branch3, branch4], dim=1)
 
 class GoogleNet(nn.Module):
     def __init__(self, config):
@@ -89,7 +102,7 @@ class GoogleNet(nn.Module):
         x = x.view(x.size(0), -1)
         x = self.dropout(x)
         x = self.fc(x)
-        x = F.softmax(x, dim=1)
+        x = F.softmax(x, dim=-1)
         return x
 
 class ResNet50_Model(nn.Module):
@@ -101,7 +114,7 @@ class ResNet50_Model(nn.Module):
         
     def forward(self, x):
         x = self.cnn(x)
-        x = F.softmax(x, dim=1)
+        x = F.softmax(x, dim=-1)
         return x
 
 class ResNet18_Model(nn.Module):
@@ -113,7 +126,7 @@ class ResNet18_Model(nn.Module):
         
     def forward(self, x):
         x = self.cnn(x)
-        x = F.softmax(x, dim=1)
+        x = F.softmax(x, dim=-1)
         return x
 
 class LeNet5(nn.Module):
@@ -151,7 +164,7 @@ class LeNet5(nn.Module):
         x = self.fc2(x)
         x = nn.functional.relu(x)
         x = self.fc3(x)
-        x = F.softmax(x, dim=1)
+        x = F.softmax(x, dim=-1)
         return x
 
 
