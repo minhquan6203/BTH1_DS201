@@ -7,7 +7,7 @@ from evaluate.evaluate import compute_score
 from tqdm import tqdm
 class Inference:
     def __init__(self,config):
-        self.save_path=config['save_path']
+        self.save_path=os.path.join(config['save_path'],config['model'])
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.base_model = MLP_Model(config).to(self.device)
         self.dataloader = Load_data(config)
