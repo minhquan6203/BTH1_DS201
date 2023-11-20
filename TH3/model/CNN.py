@@ -62,7 +62,7 @@ class GoogleNet(nn.Module):
         self.inception5b = InceptionModule(832, 384, 192, 384, 48, 128, 128)
 
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
-        self.dropout = nn.Dropout(0.4)
+        self.dropout = nn.Dropout(0.2)
         self.fc = nn.Linear(1024, config['num_classes'])
 
     def forward(self, x):
