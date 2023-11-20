@@ -35,9 +35,9 @@ class InceptionModule(nn.Module):
 class GoogleNet(nn.Module):
     def __init__(self, config):
         super(GoogleNet, self).__init__()
-        self.image_W = config.image_W
-        self.image_H = config.image_H
-        self.image_C = config.image_C
+        self.image_W = config['image_W']
+        self.image_H = config['image_H']
+        self.image_C = config['image_C']
 
         self.conv1 = nn.Conv2d(self.image_C, 64, kernel_size=7, stride=2, padding=3)
         self.maxpool1 = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
@@ -63,7 +63,7 @@ class GoogleNet(nn.Module):
 
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
         self.dropout = nn.Dropout(0.4)
-        self.fc = nn.Linear(1024, config.num_classes)
+        self.fc = nn.Linear(1024, config['num_classes'])
 
     def forward(self, x):
         x = F.relu(self.conv1(x))
@@ -95,8 +95,8 @@ class GoogleNet(nn.Module):
 class ResNet50_Model(nn.Module):
     def __init__(self, config):
         super(ResNet50_Model, self).__init__()
-        self.num_classes = config.num_classes
-        self.cnn = models.resnet50(pretrained=config.load_pretrained)
+        self.num_classes = config['num_classes']
+        self.cnn = models.resnet50(pretrained=config['load_pretrained'])
         self.cnn.fc = nn.Linear(self.cnn.fc.in_features, self.num_classes)
         
     def forward(self, x):
@@ -104,12 +104,23 @@ class ResNet50_Model(nn.Module):
         x = torch.softmax(x, dim=1)
         return x
 
+class ResNet18_Model(nn.Module):
+    def __init__(self, config):
+        super(ResNet50_Model, self).__init__()
+        self.num_classes = config['num_classes']
+        self.cnn = models.resnet18(pretrained=config['load_pretrained'])
+        self.cnn.fc = nn.Linear(self.cnn.fc.in_features, self.num_classes)
+        
+    def forward(self, x):
+        x = self.cnn(x)
+        x = torch.softmax(x, dim=1)
+        return x
 
 class LeNet5(nn.Module):
     def __init__(self,config):
         super(LeNet5, self).__init__()
-        self.image_C = config.image_C
-        self.num_classes = config.num_classes
+        self.image_C = config['image_C']
+        self.num_classes = config['num_classes']
 
         #các lớp convolution
         self.conv1 = nn.Conv2d(self.image_C, 6, 5, padding=2)
@@ -147,12 +158,14 @@ class LeNet5(nn.Module):
 class CNN_Model(nn.Module):
     def __init__(self, config):
         super().__init__()
-        if config['model']=='letnet':
+        if config['model']=='lenet':
             self.model=LeNet5(config)
         if config['model']=='googlenet':
             self.model=GoogleNet(config)
-        if config['model']=='letnet':
+        if config['model']=='resnet50':
             self.model=ResNet50_Model(config)
+        if config['model']=='resnet18':
+            self.model=ResNet18_Model(config)
         
         self.loss_fn=nn.CrossEntropyLoss()
     def forward(self,imgs,labels=None):
