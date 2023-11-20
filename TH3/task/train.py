@@ -16,7 +16,7 @@ class Classify_Task:
         self.patience = config['patience']
         self.learning_rate = config['learning_rate']
         self.best_metric=config['best_metric']
-        self.save_path=config['save_path']
+        self.save_path=os.path.join(config['save_path'],config['model'])
         self.dataloader = Load_data(config)
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.base_model = CNN_Model(config).to(self.device)
