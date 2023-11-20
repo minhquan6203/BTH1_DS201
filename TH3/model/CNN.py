@@ -62,7 +62,7 @@ class GoogleNet(nn.Module):
         self.inception5b = InceptionModule(832, 384, 192, 384, 48, 128, 128)
 
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
-        self.dropout = nn.Dropout(0.2)
+        self.dropout = nn.Dropout(0.3)
         self.fc = nn.Linear(1024, config['num_classes'])
 
     def forward(self, x):
@@ -89,7 +89,7 @@ class GoogleNet(nn.Module):
         x = x.view(x.size(0), -1)
         x = self.dropout(x)
         x = self.fc(x)
-
+        x = F.softmax(x, dim=1)
         return x
 
 class ResNet50_Model(nn.Module):
@@ -101,7 +101,7 @@ class ResNet50_Model(nn.Module):
         
     def forward(self, x):
         x = self.cnn(x)
-        x = torch.softmax(x, dim=1)
+        x = F.softmax(x, dim=1)
         return x
 
 class ResNet18_Model(nn.Module):
@@ -113,7 +113,7 @@ class ResNet18_Model(nn.Module):
         
     def forward(self, x):
         x = self.cnn(x)
-        x = torch.softmax(x, dim=1)
+        x = F.softmax(x, dim=1)
         return x
 
 class LeNet5(nn.Module):
@@ -151,7 +151,7 @@ class LeNet5(nn.Module):
         x = self.fc2(x)
         x = nn.functional.relu(x)
         x = self.fc3(x)
-
+        x = F.softmax(x, dim=1)
         return x
 
 
