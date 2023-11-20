@@ -119,7 +119,7 @@ class ResNet50_Model(nn.Module):
 
 class ResNet18_Model(nn.Module):
     def __init__(self, config):
-        super(ResNet50_Model, self).__init__()
+        super(ResNet18_Model, self).__init__()
         self.num_classes = config['num_classes']
         self.cnn = models.resnet18(pretrained=config['load_pretrained'])
         self.cnn.fc = nn.Linear(self.cnn.fc.in_features, self.num_classes)
