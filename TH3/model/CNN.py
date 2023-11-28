@@ -110,6 +110,8 @@ class ResNet50_Model(nn.Module):
         super(ResNet50_Model, self).__init__()
         self.num_classes = config['num_classes']
         self.cnn = models.resnet50(pretrained=config['load_pretrained'])
+        for param in self.cnn.parameters():
+            param.requires_grad=False
         self.cnn.fc = nn.Linear(self.cnn.fc.in_features, self.num_classes)
         
     def forward(self, x):
