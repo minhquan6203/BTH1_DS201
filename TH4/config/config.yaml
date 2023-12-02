@@ -1,7 +1,5 @@
-train_path: ./mnist_png/mnist_png/training
-test_path: ./mnist_png/mnist_png/testing
-# train_path: ./cifar10/cifar10/train
-# test_path: ./cifar10/cifar10/test
+train_path: /content/data/chest_xray/train
+test_path: /content/data/chest_xray/test
 save_path: ./save
 train_batch: 128
 dev_batch: 128
@@ -10,12 +8,12 @@ num_worker: 2
 aug: False
 patience: 5
 image_C:  3
-image_W: 28
-image_H: 28
-model: lenet # resnet50, resnet18, vgg16, vgg19
+image_W: 224
+image_H: 224
+model: vgg16 # resnet50, resnet18, vgg16, vgg19
 load_pretrained: True
 freeze: False
-num_classes: 10
+num_classes: 2
 learning_rate: 0.001
 num_epochs: 100
 best_metric: accuracy
